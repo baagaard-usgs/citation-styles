@@ -114,8 +114,15 @@
                 <text variable="container-title" prefix=" "/>
               </group>
               <group prefix=" ">
-                <text term="at"/>
-                <text variable="URL" prefix=" "/>
+		<choose>
+		  <if variable="DOI">
+		    <text variable="DOI" prefix="DOI: https://doi.org/"/>
+		  </if>
+		  <else>
+                    <text term="at"/>
+                    <text variable="URL" prefix=" "/>
+		  </else>
+		</choose>
               </group>
             </group>
           </group>
@@ -195,7 +202,85 @@
           <text variable="title" prefix=" " suffix=":"/>
           <text variable="event" prefix=" "/>
           <text variable="event-place" prefix=", "/>
+	  <choose>
+	    <if variable="URL">
+              <group prefix=", ">
+		<text term="accessed"/>
+		<group prefix=" " suffix=",">
+		  <date variable="accessed">
+                    <date-part name="month" form="long" suffix=" "/>
+                    <date-part name="day" form="numeric" suffix=", "/>
+                    <date-part name="year" form="long"/>
+		  </date>
+		</group>
+		<group prefix=" ">
+		  <text variable="URL" prefix="at "/>
+		</group>
+              </group>
+	    </if>
+	  </choose>
         </else-if>
+        <else-if type="dataset">
+          <text variable="title" prefix=" " suffix=":"/>
+          <text variable="publisher" prefix=" " suffix=", "/>
+          <group prefix=" ">
+            <text term="accessed"/>
+            <group prefix=" " suffix=",">
+              <date variable="accessed">
+                <date-part name="month" form="long" suffix=" "/>
+                <date-part name="day" form="numeric" suffix=", "/>
+                <date-part name="year" form="long"/>
+              </date>
+            </group>
+            <group prefix=" ">
+              <text term="at"/>
+              <text variable="container-title" prefix=" "/>
+            </group>
+            <group prefix=" ">
+	      <choose>
+		<if variable="DOI">
+		  <text variable="DOI" prefix="at https://doi.org/"/>
+		</if>
+		<else>
+                  <text term="at"/>
+                  <text variable="URL" prefix=" "/>
+		</else>
+	      </choose>
+            </group>
+          </group>
+	</else-if>
+        <else-if type="software">
+	  <group suffix=":">
+            <text variable="title" prefix=" "/>
+	    <choose>
+	      <if variable="version">
+		<text variable="version" prefix=" (version " suffix=")"/>
+	      </if>
+	    </choose>
+	  </group>
+	  <text variable="publisher" prefix=" " suffix=", "/>
+          <group prefix=" ">
+            <text term="accessed"/>
+            <group prefix=" " suffix=",">
+              <date variable="accessed">
+                <date-part name="month" form="long" suffix=" "/>
+                <date-part name="day" form="numeric" suffix=", "/>
+                <date-part name="year" form="long"/>
+              </date>
+            </group>
+            <group prefix=" ">
+	      <choose>
+		<if variable="DOI">
+		  <text variable="DOI" prefix="at https://doi.org/"/>
+		</if>
+		<else>
+                  <text term="at"/>
+                  <text variable="URL" prefix=" "/>
+		</else>
+	      </choose>
+            </group>
+          </group>
+	</else-if>
         <else>
           <group suffix=":">
             <text variable="title" prefix=" "/>
@@ -208,6 +293,11 @@
               <text variable="issue" prefix="no. "/>
             </group>
             <text variable="page" prefix="p. "/>
+	    <choose>
+	      <if variable="DOI">
+		<text variable="DOI" prefix="DOI: "/>
+	      </if>
+	    </choose>
           </group>
         </else>
       </choose>
